@@ -1,9 +1,0 @@
-#!/bin/bash
-
-VERSION=$(cat VERSION)
-echo "Tagging and pushing..."
-
-docker tag $DOCKER_REPO $DOCKER_REPO:$VERSION
-
-docker push $DOCKER_REPO
-docker push $DOCKER_REPO:$VERSION
