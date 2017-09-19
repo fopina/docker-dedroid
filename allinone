@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$2" ]; then
+	echo "Usage: $0 INPUT_DIR OUTPUT_APK"
+	exit 1
+fi
+
+if [ ! -e /dedroid.keystore ]; then
+	echo "Generating keypair..."
+	keytool -genkeypair -v -keystore /dedroid.keystore \
+		    -alias dedroid -keyalg RSA -keysize 2048 \
+		    -validity 10000 -dname "CN=DeDroid, OU=DeDroid, O=DeDroid, L=DeDroid, ST=DeDroid, C=DD" \
+		    -storepass password -keypass password
+fi
+
+echo "Bundling with apktool..."
+apktool b $1 -o $2.DEDROID.APK
+echo "Aligning..."
+zipalign -f -v 4 $2.DEDROID.APK $2
+rm $2.DEDROID.APK
+echo "Signing..."
+apksigner sign --ks /dedroid.keystore --ks-key-alias dedroid --ks-pass pass:password $2

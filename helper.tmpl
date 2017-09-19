@@ -1,0 +1,23 @@
+#!/bin/bash
+
+IMAGE="fopina/dedroid"
+
+help() {
+	cat <<HELP
+Usage: $0 d APK_FILE OUTPUT_DIR
+       $0 b INPUT_DIR APK_FILE
+
+"d" will unpack the APK to OUTPUT_DIR and decode .dex to smali
+"b" will rebuild APK from INPUT_DIR, zipalign it and sign it with new self-signed certificate
+HELP
+}
+
+if [ -z "$3" ]; then
+	help	
+elif [ "$1" == "b" ]; then
+	docker run --rm -ti -v $(pwd):/work $IMAGE allinone "$2" "$3"
+elif [ "$1" == "d" ]; then
+	docker run --rm -ti -v $(pwd):/work $IMAGE apktool d "$2" -o "$3"
+else
+	help
+fi
