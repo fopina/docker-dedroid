@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+IMAGE="fopina/dedroid:v2"
+
 if [ -z "$1" ]; then
 	cat <<EOF
 This is a docker image with tools to analyze APKs.

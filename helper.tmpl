@@ -1,14 +1,16 @@
 #!/bin/bash
 
-IMAGE="fopina/dedroid"
+IMAGE="fopina/dedroid:v2"
 
 help() {
 	cat <<HELP
 Usage: $0 d APK_FILE OUTPUT_DIR
        $0 b INPUT_DIR APK_FILE
+       $0 j APK_FILE JAR_FILE
 
 "d" will unpack the APK to OUTPUT_DIR and decode .dex to smali
 "b" will rebuild APK from INPUT_DIR, zipalign it and sign it with new self-signed certificate
+"j" will run dex2jar on APK_FILE
 HELP
 }
 
@@ -18,6 +20,8 @@ elif [ "$1" == "b" ]; then
 	docker run --rm -ti -v $(pwd):/work $IMAGE allinone "$2" "$3"
 elif [ "$1" == "d" ]; then
 	docker run --rm -ti -v $(pwd):/work $IMAGE apktool d "$2" -o "$3"
+elif [ "$1" == "j" ]; then
+	docker run --rm -ti -v $(pwd):/work $IMAGE d2j-dex2jar.sh "$2" -o "$3"
 else
 	help
 fi
