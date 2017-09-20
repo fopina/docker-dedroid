@@ -1,20 +1,20 @@
-#!/bin/bash
-
-IMAGE="fopina/dedroid:v2"
-
 help() {
 	cat <<HELP
 Usage: $0 d APK_FILE OUTPUT_DIR
        $0 b INPUT_DIR APK_FILE
        $0 j APK_FILE JAR_FILE
+       $0 sh
 
 "d" will unpack the APK to OUTPUT_DIR and decode .dex to smali
 "b" will rebuild APK from INPUT_DIR, zipalign it and sign it with new self-signed certificate
 "j" will run dex2jar on APK_FILE
+"sh" will jump into the shell inside the container, sharing current directory
 HELP
 }
 
-if [ -z "$3" ]; then
+if [ "$1" == "sh" ]
+	docker run --rm -ti -v $(pwd):/work $IMAGE sh
+elif [ -z "$3" ]; then
 	help	
 elif [ "$1" == "b" ]; then
 	docker run --rm -ti -v $(pwd):/work $IMAGE allinone "$2" "$3"

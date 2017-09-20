@@ -38,4 +38,6 @@ COPY allinone /dedroid/allinone
 ENV PATH=/dedroid/:$PATH
 RUN mkdir /work
 WORKDIR /work
+ARG DEDROID="fopina/dedroid"
+ENV DEDROID=$DEDROID
 ENTRYPOINT ["/entrypoint.sh"]

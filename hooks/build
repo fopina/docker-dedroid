@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Build hook running"
+
+docker build --build-arg DEDROID=$IMAGE_NAME -t $IMAGE_NAME .
