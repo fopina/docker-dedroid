@@ -3,4 +3,4 @@
 echo "Build hook running"
 
 CLEAN_NAME=$(echo $IMAGE_NAME | sed -e 's/^index.docker.io\///')
-docker build --build-arg DEDROID=$IMAGE_NAME -t $IMAGE_NAME .
+docker build --build-arg DEDROID=$CLEAN_NAME -t $IMAGE_NAME .
