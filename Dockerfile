@@ -14,6 +14,8 @@ RUN curl -sLO https://github.com/pxb1988/dex2jar/releases/download/2.0/dex-tools
 RUN unzip -q dex-tools-2.0.zip
 RUN rm dex2jar-2.0/*.bat
 RUN mkdir -p /export/lib/
+RUN curl -sL https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.2.4.jar > /export/apktool.jar
+RUN curl -sL https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool > /export/apktool
 RUN cp -a /sdk/build-tools/26.0.1/apksigner \
 	      /sdk/build-tools/26.0.1/zipalign \
 	      /dex2jar-2.0/* \
@@ -25,14 +27,11 @@ RUN chmod a+x /export/d2j*.sh
 
 FROM anapsix/alpine-java:8
 
-RUN apk add --no-cache curl
 RUN mkdir /dedroid/
-RUN curl -sL https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.2.4.jar > /dedroid/apktool.jar
-RUN curl -sL https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool > /dedroid/apktool
-RUN chmod a+x /dedroid/apktool
 COPY --from=sdkbuilder /export \
 					   /dedroid/
 COPY --from=sdkbuilder /sdk/build-tools/26.0.1/lib64/libc++.so /lib64/
+RUN chmod a+x /dedroid/apktool
 COPY entrypoint.sh /entrypoint.sh
 COPY helper.tmpl /helper.tmpl
 COPY allinone /dedroid/allinone
