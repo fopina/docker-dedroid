@@ -4,16 +4,22 @@ Usage: $0 d APK_FILE OUTPUT_DIR
        $0 b INPUT_DIR APK_FILE
        $0 j APK_FILE JAR_FILE
        $0 sh
+       $0 update
 
 "d" will unpack the APK to OUTPUT_DIR and decode .dex to smali
 "b" will rebuild APK from INPUT_DIR, zipalign it and sign it with new self-signed certificate
 "j" will run dex2jar on APK_FILE
 "sh" will jump into the shell inside the container, sharing current directory
+"update" will pull latest docker image and replace this helper script
 HELP
+	exit 1
 }
 
 if [ "$1" == "sh" ]; then
 	docker run --rm -ti -v $(pwd):/work $IMAGE sh
+elif [ "$1" == "update" ]; then
+	docker pull fopina/dedroid
+	docker run --rm fopina/dedroid helper > $0
 elif [ -z "$3" ]; then
 	help	
 elif [ "$1" == "b" ]; then
